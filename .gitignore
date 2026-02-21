@@ -6,12 +6,9 @@ dist/
 .env.production
 .vite/
 
-package.json
 package-lock.json
 index.html
 
-vite.config.ts
-postcss.config.mjs
 tailwind.config.*
 tsconfig*.json
 eslint.config.*
