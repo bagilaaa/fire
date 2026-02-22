@@ -24,7 +24,6 @@ export function useAssistantChat() {
         {
           role: "assistant",
           content: response.text,
-          hasChart: response.hasChart,
           chartData: response.chartData,
         },
       ]);

@@ -1,9 +1,12 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Send, Bot } from "lucide-react";
 import { Input, Button } from "@/shared/ui";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import {
+  BarChart, Bar, LineChart, Line, PieChart, Pie, Cell,
+  XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
+} from "recharts";
 import { useAssistantChat } from "../hooks/useAssistantChat";
-import type { ChatMessage } from "../types";
+import type { ChatMessage, ChartData } from "../types";
 
 const FOLLOW_UP_QUESTIONS = [
   "Покажи распределение по офисам",
@@ -14,14 +17,75 @@ const FOLLOW_UP_QUESTIONS = [
   "Сравни нагрузку между офисами",
 ];
 
-const SAMPLE_CHART_DATA = [
-  { office: "Алматы", vip: 45 },
-  { office: "Астана", vip: 38 },
-  { office: "Шымкент", vip: 22 },
-  { office: "Караганда", vip: 18 },
-];
+const CHART_COLORS = ["#16A34A", "#2563EB", "#F59E0B", "#EF4444", "#8B5CF6", "#EC4899"];
 
-const BAR_COLORS = ["#16A34A", "#2563EB", "#F59E0B", "#EF4444", "#8B5CF6", "#EC4899"];
+function toRechartsData(chart: ChartData) {
+  return chart.labels.map((label, i) => ({
+    label,
+    value: chart.values[i] ?? 0,
+  }));
+}
+
+function AssistantChart({ chart }: { chart: ChartData }) {
+  const data = useMemo(() => toRechartsData(chart), [chart]);
+
+  const tooltipStyle = {
+    backgroundColor: "#FFFFFF",
+    border: "1px solid #E5E7EB",
+    borderRadius: "6px",
+    fontSize: "12px",
+  };
+
+  if (chart.chart_type === "pie") {
+    return (
+      <div className="mt-4 ml-11 bg-card border border-border rounded-lg p-4 max-w-[80%]">
+        {chart.title && <p className="text-sm font-medium text-foreground mb-2">{chart.title}</p>}
+        <ResponsiveContainer width="100%" height={300}>
+          <PieChart>
+            <Pie data={data} dataKey="value" nameKey="label" cx="50%" cy="50%" outerRadius={100} label>
+              {data.map((_, i) => (
+                <Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />
+              ))}
+            </Pie>
+            <Tooltip contentStyle={tooltipStyle} />
+          </PieChart>
+        </ResponsiveContainer>
+      </div>
+    );
+  }
+
+  if (chart.chart_type === "line") {
+    return (
+      <div className="mt-4 ml-11 bg-card border border-border rounded-lg p-4 max-w-[80%]">
+        {chart.title && <p className="text-sm font-medium text-foreground mb-2">{chart.title}</p>}
+        <ResponsiveContainer width="100%" height={250}>
+          <LineChart data={data}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
+            <XAxis dataKey="label" tick={{ fontSize: 12 }} stroke="#6B7280" label={chart.x_label ? { value: chart.x_label, position: "insideBottom", offset: -5, fontSize: 12 } : undefined} />
+            <YAxis tick={{ fontSize: 12 }} stroke="#6B7280" label={chart.y_label ? { value: chart.y_label, angle: -90, position: "insideLeft", fontSize: 12 } : undefined} />
+            <Tooltip contentStyle={tooltipStyle} />
+            <Line type="monotone" dataKey="value" stroke={CHART_COLORS[0]} strokeWidth={2} dot={{ r: 4 }} />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
+    );
+  }
+
+  return (
+    <div className="mt-4 ml-11 bg-card border border-border rounded-lg p-4 max-w-[80%]">
+      {chart.title && <p className="text-sm font-medium text-foreground mb-2">{chart.title}</p>}
+      <ResponsiveContainer width="100%" height={250}>
+        <BarChart data={data}>
+          <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
+          <XAxis dataKey="label" tick={{ fontSize: 12 }} stroke="#6B7280" label={chart.x_label ? { value: chart.x_label, position: "insideBottom", offset: -5, fontSize: 12 } : undefined} />
+          <YAxis tick={{ fontSize: 12 }} stroke="#6B7280" label={chart.y_label ? { value: chart.y_label, angle: -90, position: "insideLeft", fontSize: 12 } : undefined} />
+          <Tooltip contentStyle={tooltipStyle} />
+          <Bar dataKey="value" fill={CHART_COLORS[0]} radius={[4, 4, 0, 0]} name={chart.y_label || "Значение"} />
+        </BarChart>
+      </ResponsiveContainer>
+    </div>
+  );
+}
 
 function MessageBubble({ message }: { message: ChatMessage }) {
   return (
@@ -66,44 +130,7 @@ export function AIAssistantPage() {
               <div key={index}>
                 <MessageBubble message={message} />
 
-                {message.hasChart && (() => {
-                  const raw = message.chartData;
-                  const chartItems = Array.isArray(raw) ? raw : SAMPLE_CHART_DATA;
-                  const keys = chartItems.length > 0
-                    ? Object.keys(chartItems[0]).filter((k) => typeof chartItems[0][k] === "number")
-                    : ["vip"];
-                  const labelKey = chartItems.length > 0
-                    ? Object.keys(chartItems[0]).find((k) => typeof chartItems[0][k] === "string") ?? "office"
-                    : "office";
-                  return (
-                    <div className="mt-4 ml-11 bg-card border border-border rounded-lg p-4 max-w-[80%]">
-                      <ResponsiveContainer width="100%" height={250}>
-                        <BarChart data={chartItems}>
-                          <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-                          <XAxis dataKey={labelKey} tick={{ fontSize: 12 }} stroke="#6B7280" />
-                          <YAxis tick={{ fontSize: 12 }} stroke="#6B7280" />
-                          <Tooltip
-                            contentStyle={{
-                              backgroundColor: "#FFFFFF",
-                              border: "1px solid #E5E7EB",
-                              borderRadius: "6px",
-                              fontSize: "12px",
-                            }}
-                          />
-                          {keys.map((key, i) => (
-                            <Bar
-                              key={key}
-                              dataKey={key}
-                              fill={BAR_COLORS[i % BAR_COLORS.length]}
-                              radius={[4, 4, 0, 0]}
-                              name={key}
-                            />
-                          ))}
-                        </BarChart>
-                      </ResponsiveContainer>
-                    </div>
-                  );
-                })()}
+                {message.chartData && <AssistantChart chart={message.chartData} />}
 
                 {message.role === "assistant" && (
                   <div className="mt-4 ml-11 max-w-[80%]">

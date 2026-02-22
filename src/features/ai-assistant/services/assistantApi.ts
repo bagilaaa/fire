@@ -1,17 +1,17 @@
 import { apiPost } from "@/shared/api/client";
+import type { ChartData } from "../types";
 
 interface AIQueryResponse {
   answer: string;
-  chart_data: Record<string, unknown> | null;
+  chart_data: ChartData | null;
 }
 
 export async function sendAssistantQuery(
   query: string
-): Promise<{ text: string; hasChart?: boolean; chartData?: unknown }> {
+): Promise<{ text: string; chartData?: ChartData }> {
   const res = await apiPost<AIQueryResponse>("/ai/query", { query });
   return {
     text: res.answer,
-    hasChart: res.chart_data != null,
     chartData: res.chart_data ?? undefined,
   };
 }
