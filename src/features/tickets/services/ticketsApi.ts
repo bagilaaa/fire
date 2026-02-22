@@ -61,6 +61,7 @@ interface ProcessResponse {
 function mapTicket(t: TicketOut, managerName?: string): Ticket {
   return {
     id: String(t.id),
+    guid: t.client_guid ?? undefined,
     segment: t.segment ?? "",
     type: t.ticket_type ?? "",
     sentiment: t.sentiment ?? "",
@@ -73,18 +74,34 @@ function mapTicket(t: TicketOut, managerName?: string): Ticket {
   };
 }
 
+/** Мок-данные при недоступности API (значения совпадают с опциями фильтра) */
+const MOCK_TICKETS: Ticket[] = [
+  { id: "1", guid: "a7f3c8e2-4b9d-11ef-8a2c-0242ac120001", segment: "VIP", type: "Жалоба", sentiment: "Негативная", priority: 9, language: "RU", office: "Алматы", manager: "Иванов А.С.", status: "В обработке", aiSummary: "Жалоба на задержку. Связаться с клиентом." },
+  { id: "2", guid: "a7f3c8e2-4b9d-11ef-8a2c-0242ac120002", segment: "Mass", type: "Консультация", sentiment: "Нейтральная", priority: 5, language: "KZ", office: "Астана", manager: "Петрова М.К.", status: "Назначено", aiSummary: "Консультация по вкладам." },
+  { id: "3", guid: "a7f3c8e2-4b9d-11ef-8a2c-0242ac120003", segment: "Priority", type: "Жалоба", sentiment: "Негативная", priority: 8, language: "RU", office: "Шымкент", manager: "Сидоров Д.П.", status: "В обработке", aiSummary: "Жалоба на сервис." },
+  { id: "4", guid: "a7f3c8e2-4b9d-11ef-8a2c-0242ac120004", segment: "Mass", type: "Смена данных", sentiment: "Позитивная", priority: 4, language: "EN", office: "Алматы", manager: "Алиева Л.Р.", status: "Завершено", aiSummary: "Смена контактов." },
+  { id: "5", guid: "a7f3c8e2-4b9d-11ef-8a2c-0242ac120005", segment: "VIP", type: "Претензия", sentiment: "Нейтральная", priority: 7, language: "RU", office: "Караганда", manager: "Кузнецова Е.А.", status: "В обработке", aiSummary: "Претензия по комиссии." },
+  { id: "6", guid: "a7f3c8e2-4b9d-11ef-8a2c-0242ac120006", segment: "Mass", type: "Консультация", sentiment: "Негативная", priority: 6, language: "KZ", office: "Астана", manager: "Нурланов Т.Б.", status: "Назначено", aiSummary: "Вопрос по кредиту." },
+  { id: "7", guid: "a7f3c8e2-4b9d-11ef-8a2c-0242ac120007", segment: "Priority", type: "Жалоба", sentiment: "Позитивная", priority: 8, language: "RU", office: "Алматы", manager: "Смирнов В.И.", status: "В обработке", aiSummary: "Жалоба рассмотрена." },
+  { id: "8", guid: "a7f3c8e2-4b9d-11ef-8a2c-0242ac120008", segment: "Mass", type: "Жалоба", sentiment: "Негативная", priority: 3, language: "RU", office: "Шымкент", manager: "Джумабаева А.К.", status: "Назначено", aiSummary: "Жалоба на отделение." },
+];
+
 export async function fetchTickets(): Promise<Ticket[]> {
-  const [tickets, managers] = await Promise.all([
-    apiGet<TicketOut[]>("/tickets?limit=500"),
-    apiGet<ManagerOut[]>("/managers"),
-  ]);
+  try {
+    const [tickets, managers] = await Promise.all([
+      apiGet<TicketOut[]>("/tickets?limit=500"),
+      apiGet<ManagerOut[]>("/managers"),
+    ]);
 
-  const managerMap = new Map<number, string>();
-  managers.forEach((m) => managerMap.set(m.id, m.full_name));
+    const managerMap = new Map<number, string>();
+    managers.forEach((m) => managerMap.set(m.id, m.full_name));
 
-  return tickets.map((t) =>
-    mapTicket(t, t.manager_id ? managerMap.get(t.manager_id) : undefined)
-  );
+    return tickets.map((t) =>
+      mapTicket(t, t.manager_id ? managerMap.get(t.manager_id) : undefined)
+    );
+  } catch {
+    return [...MOCK_TICKETS];
+  }
 }
 
 export async function fetchTicketById(

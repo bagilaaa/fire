@@ -63,11 +63,11 @@ export function TicketFilters({
     <div className="mb-6 flex items-center gap-2">
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
-          <Button variant="outline" size="sm" className="relative gap-2">
+          <Button variant="outline" size="sm" className="relative h-9 mt-2 gap-2 px-3">
             <Filter size={16} />
             Фильтр
             {activeCount > 0 && (
-              <span className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-medium text-primary-foreground">
+              <span className="pointer-events-none absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-medium text-primary-foreground">
                 {activeCount}
               </span>
             )}

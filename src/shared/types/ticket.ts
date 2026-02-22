@@ -1,6 +1,8 @@
 /** Обращение (тикет) */
 export interface Ticket {
   id: string;
+  /** GUID обращения (клиента), если есть */
+  guid?: string;
   segment: string;
   type: string;
   sentiment: string;

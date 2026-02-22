@@ -43,7 +43,7 @@ export function RequestsPage() {
   return (
     <div className="p-8">
       <div className="max-w-[1440px] mx-auto">
-        <div className="flex flex-wrap items-center gap-4 mb-6">
+        <div className="flex flex-wrap items-end gap-4 mb-6">
           <TicketFilters
             filters={filters}
             setFilter={setFilter}

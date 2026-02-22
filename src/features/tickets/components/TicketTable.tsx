@@ -18,7 +18,7 @@ export function TicketTable({
       <Table className="w-full">
         <TableHeader className="bg-muted/30">
           <TableRow>
-            <TableHead className="px-4 py-3 text-sm font-medium text-muted-foreground">ID</TableHead>
+            <TableHead className="w-[140px] max-w-[140px] px-4 py-3 text-sm font-medium text-muted-foreground">GUID</TableHead>
             <TableHead className="px-4 py-3 text-sm font-medium text-muted-foreground">Сегмент</TableHead>
             <TableHead className="px-4 py-3 text-sm font-medium text-muted-foreground">Тип</TableHead>
             <TableHead className="px-4 py-3 text-sm font-medium text-muted-foreground">Тональность</TableHead>
@@ -32,7 +32,7 @@ export function TicketTable({
         <TableBody>
           {tickets.map((request) => (
             <TableRow key={request.id} className="border-t border-border hover:bg-muted/20 transition-colors">
-              <TableCell className="px-4 py-3 text-sm font-medium text-foreground">{request.id}</TableCell>
+              <TableCell className="w-[140px] max-w-[140px] px-4 py-3 text-sm font-medium text-foreground truncate" title={request.guid ?? request.id}>{request.guid ?? request.id}</TableCell>
               <TableCell className="px-4 py-3 text-sm text-foreground">{request.segment}</TableCell>
               <TableCell className="px-4 py-3 text-sm text-foreground">{request.type}</TableCell>
               <TableCell className="px-4 py-3 text-sm text-muted-foreground">{request.sentiment}</TableCell>

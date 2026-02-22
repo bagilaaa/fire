@@ -66,12 +66,9 @@ export function ImportDataPage() {
   return (
     <div className="p-8">
       <div className="max-w-[1440px] mx-auto">
-        <div className="mb-10">
-          <h1 className="text-[40px] font-semibold text-foreground mb-3">Загрузка и обработка данных</h1>
-          <p className="text-muted-foreground text-lg">
-            Импортируйте CSV-файлы для запуска системы интеллектуального распределения
-          </p>
-        </div>
+        <p className="text-muted-foreground text-lg mb-8">
+          Импортируйте CSV-файлы для запуска системы интеллектуального распределения
+        </p>
 
         {stage === "idle" && (
           <div className="mb-8">

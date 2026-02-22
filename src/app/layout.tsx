@@ -27,10 +27,9 @@ export function Layout() {
       <aside className="w-[220px] bg-card border-r border-border flex flex-col">
         <div className="h-16 border-b border-border flex items-center px-6">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-primary rounded flex items-center justify-center">
-              <span className="text-white font-semibold text-sm">F</span>
-            </div>
-            <span className="font-semibold text-foreground">FIRE</span>
+            <img src="/logo.png" alt="Freedom Broker" className="w-8 h-8 object-contain flex-shrink-0" width={32} height={32} onError={(e) => { e.currentTarget.style.display = "none"; e.currentTarget.nextElementSibling?.classList.remove("hidden"); }} />
+            <div className="hidden w-8 h-8 bg-primary rounded flex items-center justify-center flex-shrink-0"><span className="text-primary-foreground font-semibold text-sm">F</span></div>
+            <span className="font-semibold text-foreground">Freedom Broker</span>
           </div>
         </div>
         <nav className="flex-1 py-4 px-3">

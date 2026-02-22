@@ -2,19 +2,21 @@
 
 :root {
   --font-size: 16px;
-  --background: #F4F6F8;
-  --foreground: #111827;
-  --card: #FFFFFF;
-  --card-foreground: #111827;
+  /* Brand: White background, #F4F6F9 cards, #4FAF3B primary, #1F5019 hover, #0C111A text */
+  --background: #FFFFFF;
+  --foreground: #0C111A;
+  --card: #F4F6F9;
+  --card-foreground: #0C111A;
   --popover: #FFFFFF;
-  --popover-foreground: #111827;
-  --primary: #16A34A;
+  --popover-foreground: #0C111A;
+  --primary: #4FAF3B;
+  --primary-hover: #1F5019;
   --primary-foreground: #FFFFFF;
-  --secondary: #6B7280;
-  --secondary-foreground: #FFFFFF;
-  --muted: #E5E7EB;
-  --muted-foreground: #6B7280;
-  --accent: #16A34A;
+  --secondary: #F4F6F9;
+  --secondary-foreground: #0C111A;
+  --muted: #F4F6F9;
+  --muted-foreground: #5C6370;
+  --accent: #4FAF3B;
   --accent-foreground: #FFFFFF;
   --destructive: #DC2626;
   --destructive-foreground: #FFFFFF;
@@ -24,21 +26,21 @@
   --switch-background: #cbced4;
   --font-weight-medium: 500;
   --font-weight-normal: 400;
-  --ring: #16A34A;
-  --chart-1: #16A34A;
+  --ring: #4FAF3B;
+  --chart-1: #4FAF3B;
   --chart-2: #3B82F6;
   --chart-3: #F59E0B;
   --chart-4: #DC2626;
   --chart-5: #8B5CF6;
   --radius: 0.375rem;
-  --sidebar: #FFFFFF;
-  --sidebar-foreground: #111827;
-  --sidebar-primary: #16A34A;
+  --sidebar: #F4F6F9;
+  --sidebar-foreground: #0C111A;
+  --sidebar-primary: #4FAF3B;
   --sidebar-primary-foreground: #FFFFFF;
-  --sidebar-accent: #F4F6F8;
-  --sidebar-accent-foreground: #111827;
+  --sidebar-accent: #E5E7EB;
+  --sidebar-accent-foreground: #0C111A;
   --sidebar-border: #E5E7EB;
-  --sidebar-ring: #16A34A;
+  --sidebar-ring: #4FAF3B;
 }
 
 .dark {
@@ -86,6 +88,7 @@
   --color-popover: var(--popover);
   --color-popover-foreground: var(--popover-foreground);
   --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
   --color-primary-foreground: var(--primary-foreground);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
