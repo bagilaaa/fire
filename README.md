@@ -136,23 +136,6 @@ The API waits for the database health check to pass before starting.
 
 ### 4. Access the app
 
-| Interface | URL |
-|-----------|-----|
-| API base | http://localhost:8000 |
-| Swagger UI | http://localhost:8000/docs |
-| ReDoc | http://localhost:8000/redoc |
-
----
-
-## Configuration
-
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `OPENAI_API_KEY` | Your OpenAI API key | *(required)* |
-| `OPENAI_MODEL` | OpenAI model to use | `gpt-4o-mini` |
-| `DATABASE_URL` | PostgreSQL connection string | set by Docker Compose |
-| `DATA_DIR` | Path to the CSV data directory inside the container | `/app/data` |
-
 ---
 
 ## Development
